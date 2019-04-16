@@ -32,30 +32,34 @@ def main():
 	offset = [-2,-1,0,1,2]
 	N = diags(k,offset).toarray()	
 	#print(N)
-	
+	#print(M+N+D)
+	#print(A)
 #(M+D)x(k+1)=-Nx(k)+b
 	m=M+D
 	#print(m)
 	m1=inv(np.matrix(m))
-	print(m1)
+	#print(m1)
 	n=np.dot(-1,N)
 	main_m=np.dot(m1,n)
-	print("main_m is:",main_m)
+	##=print("main_m is:",main_m)
 	eigenvalues = np.linalg.eigvals(main_m)
-	print("eigenvalues are:",eigenvalues)
+	#print("eigenvalues are:",eigenvalues)
 	#iterations
 	s=(10,1)
 	b=np.ones(s)
+	c=np.dot(m1,b)
 	x=linalg.solve(A, b)
 	print("the aswer is:",x)
 	iteration=0
 	x1 = np.ones((10,1))
 	err = np.ones((10,1))*100
-	while np.max(err) > 0:
+	#print(np.dot(m1,b))
+	while np.max(err) > 1:
 		iteration=iteration+1
-		xn = np.dot(main_m,x1)+b
-		err = abs((xn - x1)/xn)*100
+		xn=np.dot(main_m,x1)+c
+		err = abs((xn - x1)/(xn+0.00001))*100
 		x1 = xn
+	
 	print("first:",x1)	
 	print(iteration)
 	
@@ -73,12 +77,24 @@ def main():
 	err2 = np.ones((10,1))*100
 	while np.max(err2) > 0:
 		iteration2=iteration2+1
-		xn2 = np.dot(main_m2,x2)+b
+		xn2 = np.dot(main_m2,x2)+np.dot(d,b)
 		err2 = abs((xn2 - x2)/xn2)*100
 		x2 = xn2
 	print("second:",x2)	
 	print(iteration2)
 
+#(M+N)x(k+1)=-Dx(k)+b
+	
+	t=M+N
+
+	m3=inv(np.matrix(t))
+
+	r=np.dot(-1,D)
+	main_m3=np.dot(m3,r)
+
+	eigenvalues3 = np.linalg.eigvals(main_m3)
+	print("eigenvalues are:",eigenvalues3)
+	print("not converging")
 
 
 if __name__ == '__main__':
